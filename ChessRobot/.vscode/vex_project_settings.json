@@ -1,0 +1,18 @@
+{
+	"extension": {
+		"version": "0.6.1",
+		"json": 2
+	},
+	"project": {
+		"name": "chessRobot",
+		"description": "",
+		"creationDate": "4/11/2025, 11:51:58 AM",
+		"platform": "EXP",
+		"language": "python",
+		"slot": 1,
+		"sdkVersion": "EXP_1_0_0_21",
+		"python": {
+			"main": "src/main.py"
+		}
+	}
+}

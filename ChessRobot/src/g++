@@ -1,0 +1,90 @@
+/*----------------------------------------------------------------------------*/
+/*                                                                            */
+/*    Module:       main.cpp                                                  */
+/*    Author:       jbate                                                     */
+/*    Created:      4/1/2025, 2:54:42 PM                                      */
+/*    Description:  EXP project                                               */
+/*                                                                            */
+/*----------------------------------------------------------------------------*/
+#include "vex.h"
+
+using namespace vex;
+
+// A global instance of vex::brain used for printing to the EXP brain screen
+vex::brain       Brain;
+
+// define your global instances of motors and other devices here
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cstdlib>
+#include <unistd.h>
+
+class Stockfish {
+public:
+    Stockfish(const std::string &path_to_stockfish) {
+        // Start Stockfish as a subprocess
+        process = popen(path_to_stockfish.c_str(), "w+");
+        if (process == nullptr) {
+            std::cerr << "Failed to start Stockfish process!" << std::endl;
+            exit(1);
+        }
+    }
+
+    ~Stockfish() {
+        // Close the process when done
+        fclose(process);
+    }
+
+    // Send a command to Stockfish
+    void sendCommand(const std::string &command) {
+        fprintf(process, "%s\n", command.c_str());
+        fflush(process);
+    }
+
+    // Get the response from Stockfish
+    std::string getResponse() {
+        char buffer[1024];
+        std::string response;
+        while (fgets(buffer, sizeof(buffer), process) != nullptr) {
+            response += buffer;
+            if (response.find("bestmove") != std::string::npos) {
+                break;
+            }
+        }
+        return response;
+    }
+
+    // Get the best move using the UCI protocol
+    std::string getBestMove(const std::string &fen) {
+        sendCommand("uci");  // Initialize the engine
+        sendCommand("position fen " + fen);  // Set the position from FEN
+        sendCommand("go movetime 1000");  // Give Stockfish some time to compute
+        std::string response = getResponse();
+
+        // Parse out the best move from the response
+        std::string bestMove = response.substr(response.find("bestmove ") + 9, 4);  // Extract the best move (e.g., "e2e4")
+        return bestMove;
+    }
+
+private:
+    FILE *process;
+};
+
+int main() {
+    // Path to the Stockfish binary (adjust as needed)
+    std::string path_to_stockfish = "C:\\stockfish";  // Adjust path
+
+    Stockfish stockfish(path_to_stockfish);
+
+    // Example: get best move for a given FEN position
+    std::string fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";  // Initial position in FEN
+    std::string bestMove = stockfish.getBestMove(fen);
+
+    std::cout << "Best move: " << bestMove << std::endl;
+
+    return 0;
+}
+
+

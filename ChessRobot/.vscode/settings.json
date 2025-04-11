@@ -1,0 +1,8 @@
+{
+	"C_Cpp.default.systemIncludePath": [
+		"${config:vexrobotics.vexcode.Cpp.Sdk.Home}\\EXP\\EXP_20240802_15_00_00\\vexexp\\gcc\\include\\sys"
+	],
+	"python.analysis.stubPath": "c:\\Users\\jbate\\AppData\\Roaming\\Code\\User\\globalStorage\\vexrobotics.vexcode\\sdk\\python\\EXP\\EXP_1_0_0_21\\vexexp\\stubs",
+	"python.analysis.diagnosticMode": "workspace",
+	"python.analysis.typeCheckingMode": "basic"
+}
