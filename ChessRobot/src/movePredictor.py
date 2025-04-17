@@ -26,9 +26,6 @@ class ChessGame:
             try:
                 self.board.push_san(move)  # Check that move is valid and then play it
                 # Convert the move to coordinates and output them
-                uci_move = self.board.peek().uci()  # Get the last move in UCI format
-                convert_move_to_coordinates(uci_move)
-                break
             except ValueError:
                 print("Invalid move. Please try again.")
 
@@ -47,24 +44,6 @@ class ChessGame:
         else:
             print("Game over.")
 
-def convert_move_to_coordinates(move):
-    if len(move) != 4:
-        raise ValueError("Move must be in the format 'e2e4'.")
-
-    # Split the move into components
-    start_col, start_row, end_col, end_row = move[0], move[1], move[2], move[3]
-
-   
-    start_col_num = ord(start_col.lower()) - ord('a') 
-    end_col_num = ord(end_col.lower()) - ord('a') 
-
-    
-    start_row_num = int(start_row) -1
-    end_row_num = int(end_row) -1
-
-    print(f"Your move: Start({start_col_num}, {start_row_num}), End({end_col_num}, {end_row_num})")
-
-    return start_col_num, start_row_num, end_col_num, end_row_num
 
 if __name__ == "__main__":
     engine_path = "C:\\stockfish\\stockfish-windows-x86-64"  
